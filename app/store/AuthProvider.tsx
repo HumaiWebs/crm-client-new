@@ -36,10 +36,8 @@ export default function AuthProvider({
   }
 
   useLayoutEffect(() => {
-    console.log("Layout Effect")
     const storedUserString = localStorage.getItem('user')
     const storeduser = storedUserString ? JSON.parse(storedUserString) : null
-    console.log(storedUserString)
     if (!storeduser && pathname !== '/auth/login') {
       router.push('/auth/login')
     }
