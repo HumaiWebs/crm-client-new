@@ -7,9 +7,12 @@ import { http } from "@/app/config/axiosClient";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/store/AuthProvider";
 
 export default function LoginForm() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const {login} = useAuth()
+
   const router = useRouter();
   const { status, mutate } = useMutation({
     async mutationFn(data: any) {
@@ -18,6 +21,7 @@ export default function LoginForm() {
     onSuccess(response) {
       if (response.status) {
         toast.success("Login successfull");
+        login(response.token,response.user)
         router.push("/");
       } else {
         toast.error(response.message);
