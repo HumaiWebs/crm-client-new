@@ -18,13 +18,21 @@ export const useAuth = () => {
   return ctx;
 };
 
+http.interceptors.request.use((config) => {
+  console.log(
+    "adding auth token to axios instance",
+    localStorage.getItem("token")
+  );
+  config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+  return config;
+});
+
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
-  const router = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
 
   const [user, setUser] = useState<TUser | null>(null);
@@ -36,28 +44,23 @@ export default function AuthProvider({
   }
 
   useLayoutEffect(() => {
-    const storedUserString = localStorage.getItem('user')
-    const storeduser = storedUserString ? JSON.parse(storedUserString) : null
-    if (!storeduser && pathname !== '/auth/login') {
-      router.push('/auth/login')
+    const storedUserString = localStorage.getItem("user");
+    const storeduser = storedUserString ? JSON.parse(storedUserString) : null;
+    if (!storeduser && pathname !== "/auth/login") {
+      router.push("/auth/login");
     }
-
-    http.interceptors.request.use((config) => {
-      config.headers.Authorization = localStorage.getItem("token");
-      return config;
-    });
 
     http.interceptors.response.use((config) => {
       // see if user has valid token if not logout
       if (config.status === 401) {
-        localStorage.removeItem('user')
-        localStorage.removeItem('token')
-        setUser(null)
-        router.push('/auth/login');
-        return config
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        setUser(null);
+        router.push("/auth/login");
+        return config;
       }
-      return config
-    })
+      return config;
+    });
   }, []);
 
   const values = {

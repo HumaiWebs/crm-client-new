@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex h-screen">
       <Sidebar />
-      <section className="flex-1">
+      <section className="flex-1 bg-[#F5F5F5]">
         <DashbaordSectionHeader />
         {children}
       </section>

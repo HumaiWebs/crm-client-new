@@ -28,7 +28,7 @@ const Sidebar = () => {
           {/* MAIN */}
           <Section title="MAIN">
             <SidebarLink
-              href="/dashboard"
+              href="/"
               icon={<LayoutDashboard size={18} />}
               text="Dashboard"
             />
