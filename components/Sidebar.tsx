@@ -18,7 +18,7 @@ import React from "react";
 
 const Sidebar = () => {
   return (
-    <header className="h-screen min-w-64 bg-gradient-to-b from-blue-900 to-blue-700 text-white flex flex-col justify-between fixed">
+    <header className="h-screen min-w-[300px] bg-gradient-to-b from-blue-900 to-blue-700 text-white flex flex-col justify-between">
       <div>
         <div className="text-center py-6 text-2xl font-bold border-b border-blue-600">
           HumAi CRM
