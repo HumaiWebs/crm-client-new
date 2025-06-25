@@ -15,13 +15,17 @@ import {
 import { TUser } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import { DownloadIcon, FilterIcon, ViewIcon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { ChangeEvent, useState } from "react";
 
 export default function ClientsPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const page = searchParams.get("page") || 1;
   const pageSize = searchParams.get("pageSize") || 10;
+
+  const query = searchParams.get("query") || "";
 
   const { isFetching, data } = useQuery<{ data: TUser[]; total: number }>({
     queryKey: ["get-clients_admin", page],
@@ -30,12 +34,31 @@ export default function ClientsPage() {
     },
   });
 
+  // INFO: clients search
+  const { data: searchResults, isFetching: searching } = useQuery<TUser[]>({
+    queryKey: ["search-clients_admin", query],
+    async queryFn() {
+      const result = (await http.get(`/user/search?search=${query}`)).data.users;
+      router.push(`/clients?query=${query}&pageSize=${result.length}`);
+      return result;
+    },
+  });
+
+  function handleSearchInputChange(e: ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+
+    setTimeout(() => {
+      router.push(`/clients?query=${value}`);
+    }, 500);
+  }
+
   return (
     <section className="p-4">
       <div className="w-ful flex flex-col gap-4">
         <h3 className="font-semibold text-xl text-blue-900">All Clients</h3>
         <div className="w-full gap-4 flex items-center">
           <Input
+            onChange={handleSearchInputChange}
             className="flex-1 text-lg p-2 bg-white"
             placeholder="Search clients...."
           />
@@ -44,7 +67,7 @@ export default function ClientsPage() {
         </div>
       </div>
 
-      {isFetching ? (
+      {isFetching || searching ? (
         <div className="my-8 w-full flex justify-center items-center">
           <Loader size="md" message="Loading clients....." />
         </div>
@@ -70,7 +93,10 @@ export default function ClientsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.data.map((client) => {
+            {(query.length === 0
+              ? data?.data
+              : searchResults
+            )?.map((client) => {
               return (
                 <TableRow key={client._id} className="bg-white">
                   <TableCell className="p-4 border-b border-b-blue-100">
