@@ -2,6 +2,7 @@
 
 import { http } from "@/app/config/axiosClient";
 import Loader from "@/components/global/loader";
+import Pagination from "@/components/global/pagination";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -14,13 +15,18 @@ import {
 import { TUser } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import { DownloadIcon, FilterIcon, ViewIcon } from "lucide-react";
-import React from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useState } from "react";
 
 export default function ClientsPage() {
-  const { isFetching, data } = useQuery<TUser[]>({
-    queryKey: ["get-clients_admin"],
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") || 1;
+  const pageSize = searchParams.get("pageSize") || 10;
+
+  const { isFetching, data } = useQuery<{ data: TUser[]; total: number }>({
+    queryKey: ["get-clients_admin", page],
     async queryFn() {
-      return (await http.get("/user")).data.data;
+      return (await http.get(`/user?page=${page}&pageSize=${pageSize}`)).data;
     },
   });
 
@@ -64,54 +70,33 @@ export default function ClientsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((client) => {
+            {data?.data.map((client) => {
               return (
-                <React.Fragment key={client._id}>
-                  {" "}
-                  <TableRow key={client._id} className="bg-white">
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      {client.name}
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      {client.email}
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      N/A
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      <div className="flex gap-2 items-center">
-                        <ViewIcon />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow key={client._id} className="bg-white">
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      {client.name}
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      {client.email}
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      N/A
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      <div className="flex gap-2 items-center">
-                        <ViewIcon />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
+                <TableRow key={client._id} className="bg-white">
+                  <TableCell className="p-4 border-b border-b-blue-100">
+                    <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
+                  </TableCell>
+                  <TableCell className="p-4 border-b border-b-blue-100">
+                    {client.name}
+                  </TableCell>
+                  <TableCell className="p-4 border-b border-b-blue-100">
+                    {client.email}
+                  </TableCell>
+                  <TableCell className="p-4 border-b border-b-blue-100">
+                    N/A
+                  </TableCell>
+                  <TableCell className="p-4 border-b border-b-blue-100">
+                    <div className="flex gap-2 items-center">
+                      <ViewIcon />
+                    </div>
+                  </TableCell>
+                </TableRow>
               );
             })}
           </TableBody>
         </Table>
       )}
+      {isFetching ? <Loader /> : data && <Pagination totalPages={data.total} />}
     </section>
   );
 }

@@ -27,6 +27,23 @@ http.interceptors.request.use((config) => {
   return config;
 });
 
+http.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // INFO: check if user has valid token if not logout
+    console.log(error, " : ", error.status);
+    if (error.status === 401) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      if (window.location.pathname !== "/auth/login") {
+        window.location.href = "/auth/login";
+      }
+      return error;
+    }
+    return error;
+  }
+);
+
 export default function AuthProvider({
   children,
 }: {
@@ -49,18 +66,6 @@ export default function AuthProvider({
     if (!storeduser && pathname !== "/auth/login") {
       router.push("/auth/login");
     }
-
-    http.interceptors.response.use((config) => {
-      // see if user has valid token if not logout
-      if (config.status === 401) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        setUser(null);
-        router.push("/auth/login");
-        return config;
-      }
-      return config;
-    });
   }, []);
 
   const values = {
