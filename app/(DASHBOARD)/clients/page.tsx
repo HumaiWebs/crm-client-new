@@ -96,7 +96,11 @@ export default function ClientsPage() {
           </TableBody>
         </Table>
       )}
-      {isFetching ? <Loader /> : data && <Pagination totalPages={data.total} />}
+      {isFetching ? (
+        <Loader />
+      ) : (
+        data && <Pagination totalPages={data.total / 1} />
+      )}
     </section>
   );
 }
