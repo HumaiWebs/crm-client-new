@@ -1,5 +1,6 @@
 "use client";
 
+import { getAllClients } from "@/api/user";
 import { http } from "@/app/config/axiosClient";
 import Loader from "@/components/global/loader";
 import Pagination from "@/components/global/pagination";
@@ -14,9 +15,11 @@ import {
 } from "@/components/ui/table";
 import { TUser } from "@/type";
 import { useQuery } from "@tanstack/react-query";
-import { DownloadIcon, FilterIcon, ViewIcon } from "lucide-react";
+import { DownloadIcon, ViewIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
+
+import { CSVLink } from "react-csv";
 
 export default function ClientsPage() {
   const searchParams = useSearchParams();
@@ -24,8 +27,6 @@ export default function ClientsPage() {
 
   const page = searchParams.get("page") || 1;
   const pageSize = searchParams.get("pageSize") || 10;
-
-  const query = searchParams.get("query") || "";
 
   const { isFetching, data } = useQuery<{ data: TUser[]; total: number }>({
     queryKey: ["get-clients_admin", page],
@@ -35,13 +36,17 @@ export default function ClientsPage() {
   });
 
   // INFO: clients search
+
+  const query = searchParams.get("query") || "";
   const { data: searchResults, isFetching: searching } = useQuery<TUser[]>({
     queryKey: ["search-clients_admin", query],
     async queryFn() {
-      const result = (await http.get(`/user/search?search=${query}`)).data.users;
+      const result = (await http.get(`/user/search?search=${query}`)).data
+        .users;
       router.push(`/clients?query=${query}&pageSize=${result.length}`);
       return result;
     },
+    enabled: query.length > 0,
   });
 
   function handleSearchInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -52,6 +57,12 @@ export default function ClientsPage() {
     }, 500);
   }
 
+  const csvHeaders = [
+    { label: "Name", key: "name" },
+    { label: "email", key: "email" },
+    { label: "Joined", key: "createdAt" },
+    { label: "Phone", key: "phone" },
+  ];
   return (
     <section className="p-4">
       <div className="w-ful flex flex-col gap-4">
@@ -62,8 +73,13 @@ export default function ClientsPage() {
             className="flex-1 text-lg p-2 bg-white"
             placeholder="Search clients...."
           />
-          <FilterIcon className="text-blue-900" />
-          <DownloadIcon className="text-blue-900" />
+          <CSVLink
+            data={query.length === 0 ? data?.data ?? [] : searchResults ?? []}
+            headers={csvHeaders}
+            filename={`${new Date().toLocaleDateString()}-clients.csv`}
+          >
+            <DownloadIcon className="text-blue-900" />
+          </CSVLink>
         </div>
       </div>
 
@@ -93,32 +109,31 @@ export default function ClientsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {(query.length === 0
-              ? data?.data
-              : searchResults
-            )?.map((client) => {
-              return (
-                <TableRow key={client._id} className="bg-white">
-                  <TableCell className="p-4 border-b border-b-blue-100">
-                    <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
-                  </TableCell>
-                  <TableCell className="p-4 border-b border-b-blue-100">
-                    {client.name}
-                  </TableCell>
-                  <TableCell className="p-4 border-b border-b-blue-100">
-                    {client.email}
-                  </TableCell>
-                  <TableCell className="p-4 border-b border-b-blue-100">
-                    N/A
-                  </TableCell>
-                  <TableCell className="p-4 border-b border-b-blue-100">
-                    <div className="flex gap-2 items-center">
-                      <ViewIcon />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {(query.length === 0 ? data?.data : searchResults)?.map(
+              (client) => {
+                return (
+                  <TableRow key={client._id} className="bg-white">
+                    <TableCell className="p-4 border-b border-b-blue-100">
+                      <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
+                    </TableCell>
+                    <TableCell className="p-4 border-b border-b-blue-100">
+                      {client.name}
+                    </TableCell>
+                    <TableCell className="p-4 border-b border-b-blue-100">
+                      {client.email}
+                    </TableCell>
+                    <TableCell className="p-4 border-b border-b-blue-100">
+                      N/A
+                    </TableCell>
+                    <TableCell className="p-4 border-b border-b-blue-100">
+                      <div className="flex gap-2 items-center">
+                        <ViewIcon />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              }
+            )}
           </TableBody>
         </Table>
       )}
