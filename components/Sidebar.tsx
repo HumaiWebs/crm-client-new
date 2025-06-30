@@ -1,3 +1,4 @@
+"use client";
 // components/Sidebar.tsx
 import {
   LayoutDashboard,
@@ -9,15 +10,17 @@ import {
   FolderKanban,
   LifeBuoy,
   Settings,
-  LogOut,
   UserCog,
   ShieldCheck,
   MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import Button from "./global/button";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
+  const router = useRouter();
   return (
     <header className="h-screen min-w-[300px] bg-gradient-to-b from-primary to-blue-700 text-white flex flex-col justify-between">
       <div>
@@ -100,16 +103,16 @@ const Sidebar = () => {
               icon={<LifeBuoy size={18} />}
               text="Help & Support"
             />
-            <SidebarLink
-              href="/live"
-              icon={<MessageCircle size={18} />}
-              text="Live Chat"
-            />
-            <SidebarLink
-              href="/logout"
-              icon={<LogOut size={18} />}
-              text="Logout"
-            />
+            <Button
+              className="flex gap-4 items-center"
+              onClick={() => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                router.push("/auth/login");
+              }}
+            >
+              Logout
+            </Button>
           </Section>
         </nav>
       </div>
@@ -132,7 +135,8 @@ const SidebarLink = ({
 }) => (
   <Link
     href={href}
-    className="flex items-center gap-3 px-3 py-2 rounded hover:bg-secondary transition">
+    className="flex items-center gap-3 px-3 py-2 rounded hover:bg-secondary transition"
+  >
     {icon}
     {text}
   </Link>
