@@ -12,6 +12,7 @@ import {
   LogOut,
   UserCog,
   ShieldCheck,
+  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -98,6 +99,11 @@ const Sidebar = () => {
               href="/help"
               icon={<LifeBuoy size={18} />}
               text="Help & Support"
+            />
+            <SidebarLink
+              href="/live"
+              icon={<MessageCircle size={18} />}
+              text="Live Chat"
             />
             <SidebarLink
               href="/logout"
