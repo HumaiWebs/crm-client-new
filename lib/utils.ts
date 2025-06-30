@@ -19,3 +19,16 @@ export function getStatusColor(status: string) {
       return "bg-gray-100 text-gray-800 border-gray-200";
   }
 }
+
+export function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+
+export function formatCurrency(amount: number, currency: string) {
+  return `${currency}${amount.toLocaleString()}`
+}
