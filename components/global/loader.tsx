@@ -14,7 +14,7 @@ const sizeClasses = {
 
 export default function Loader({ message, size = "md" }: LoaderProps) {
   return (
-    <div className="flex gap-4 items-center text-blue-900">
+    <div className="flex gap-4 items-center text-primary">
       <BiLoader
         className={`animate-spin text-indigo-900 ${sizeClasses[size]}`}
       />

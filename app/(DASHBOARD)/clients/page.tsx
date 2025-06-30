@@ -1,7 +1,7 @@
 "use client";
 
-import { getAllClients } from "@/api/user";
 import { http } from "@/app/config/axiosClient";
+import ClientDetailsModal from "@/components/clients/client-details-modal";
 import Loader from "@/components/global/loader";
 import Pagination from "@/components/global/pagination";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table";
 import { TUser } from "@/type";
 import { useQuery } from "@tanstack/react-query";
-import { DownloadIcon, ViewIcon } from "lucide-react";
+import { DownloadIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent } from "react";
 
@@ -63,10 +63,11 @@ export default function ClientsPage() {
     { label: "Joined", key: "createdAt" },
     { label: "Phone", key: "phone" },
   ];
+
   return (
     <section className="p-4">
       <div className="w-ful flex flex-col gap-4">
-        <h3 className="font-semibold text-xl text-blue-900">All Clients</h3>
+        <h3 className="font-semibold text-xl text-primary">All Clients</h3>
         <div className="w-full gap-4 flex items-center">
           <Input
             onChange={handleSearchInputChange}
@@ -78,7 +79,7 @@ export default function ClientsPage() {
             headers={csvHeaders}
             filename={`${new Date().toLocaleDateString()}-clients.csv`}
           >
-            <DownloadIcon className="text-blue-900" />
+            <DownloadIcon className="text-primary" />
           </CSVLink>
         </div>
       </div>
@@ -91,19 +92,19 @@ export default function ClientsPage() {
         <Table className="my-8">
           <TableHeader>
             <TableRow>
-              <TableHead className="font-semibold text-blue-900 p-4">
+              <TableHead className="font-semibold text-primary p-4">
                 Image
               </TableHead>
-              <TableHead className="font-semibold text-blue-900 p-4">
+              <TableHead className="font-semibold text-primary p-4">
                 Name
               </TableHead>
-              <TableHead className="font-semibold text-blue-900 p-4">
+              <TableHead className="font-semibold text-primary p-4">
                 Email
               </TableHead>
-              <TableHead className="font-semibold text-blue-900 p-4">
+              <TableHead className="font-semibold text-primary p-4">
                 Phone
               </TableHead>
-              <TableHead className="font-semibold text-blue-900 p-4">
+              <TableHead className="font-semibold text-primary p-4">
                 Actions
               </TableHead>
             </TableRow>
@@ -127,7 +128,7 @@ export default function ClientsPage() {
                     </TableCell>
                     <TableCell className="p-4 border-b border-b-blue-100">
                       <div className="flex gap-2 items-center">
-                        <ViewIcon />
+                        <ClientDetailsModal clientId={client._id} />
                       </div>
                     </TableCell>
                   </TableRow>

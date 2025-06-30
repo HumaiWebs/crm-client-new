@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <header className="w-full px-6 py-4 bg-blue-600 text-white flex justify-between items-center">
+    <header className="w-full px-6 py-4 bg-secondary text-white flex justify-between items-center">
       <h1 className="text-2xl font-bold">CRM Dashboard</h1>
       <nav className="space-x-4">
         <Link href="/dashboard">Dashboard</Link>

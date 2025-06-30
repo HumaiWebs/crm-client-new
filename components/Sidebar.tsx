@@ -18,9 +18,9 @@ import React from "react";
 
 const Sidebar = () => {
   return (
-    <header className="h-screen min-w-[300px] bg-gradient-to-b from-blue-900 to-blue-700 text-white flex flex-col justify-between">
+    <header className="h-screen min-w-[300px] bg-gradient-to-b from-primary to-blue-700 text-white flex flex-col justify-between">
       <div>
-        <div className="text-center py-6 text-2xl font-bold border-b border-blue-600">
+        <div className="text-center py-6 text-2xl font-bold border-b border-secondary">
           HumAi CRM
         </div>
 
@@ -126,7 +126,7 @@ const SidebarLink = ({
 }) => (
   <Link
     href={href}
-    className="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-600 transition">
+    className="flex items-center gap-3 px-3 py-2 rounded hover:bg-secondary transition">
     {icon}
     {text}
   </Link>
