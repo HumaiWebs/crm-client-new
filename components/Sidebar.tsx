@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   MessageCircle,
   ChevronsLeftRight,
+  Mail,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -65,6 +66,12 @@ const Sidebar = () => {
               href="/ecommerce"
               icon={<ShoppingCart size={18} />}
               text="E-Commerce Sites"
+
+            />
+               <SidebarLink
+              href="/email-marketing"
+              icon={<Mail size={18} />}
+              text="Email Marketing"
             />
           </Section>
  
