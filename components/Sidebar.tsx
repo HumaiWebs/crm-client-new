@@ -13,6 +13,7 @@ import {
   UserCog,
   ShieldCheck,
   MessageCircle,
+  ChevronsLeftRight,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -32,7 +33,7 @@ const Sidebar = () => {
           {/* MAIN */}
           <Section title="MAIN">
             <SidebarLink
-              href="/"
+              href="/dashboard"
               icon={<LayoutDashboard size={18} />}
               text="Dashboard"
             />
@@ -66,7 +67,7 @@ const Sidebar = () => {
               text="E-Commerce Sites"
             />
           </Section>
-
+ 
           {/* BUSINESS */}
           <Section title="BUSINESS">
             <SidebarLink
@@ -80,8 +81,14 @@ const Sidebar = () => {
               text="Projects"
             />
             <SidebarLink
+              href="/maintenance"
+              icon={<ChevronsLeftRight size={18} />}
+              text="Maintenance"
+            />
+            <SidebarLink
               href="/tickets"
               icon={<LifeBuoy size={18} />}
+        
               text="Support Tickets"
             />
           </Section>

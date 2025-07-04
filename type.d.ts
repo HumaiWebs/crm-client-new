@@ -42,3 +42,17 @@ export type TProject = {
   updatedAt: string;
   __v: number;
 };
+
+
+export interface KPIData {
+  totalClients: { count: number; newThisWeek: number; newThisMonth: number }
+  activeProjects: { count: number; change: number }
+  openTickets: { count: number; urgent: number }
+  pendingInvoices: { count: number; totalAmount: number }
+  expiringDomains: { count: number; next30Days: boolean }
+}
+
+export interface ChartData {
+  month: string
+  [key: string]: number | string
+}
