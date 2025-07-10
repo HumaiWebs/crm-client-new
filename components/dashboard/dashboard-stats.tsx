@@ -1,38 +1,45 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+"use client";
 
+import { http } from "@/app/config/axiosClient";
+import { RQKeys } from "@/app_data_store/react-query-keys";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Users,
+  Briefcase,
+  AlertCircle,
+  CreditCard,
+  Globe,
+  ArrowDownRight,
+} from "lucide-react";
+import Loader from "../global/loader";
 
-// import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Line, LineChart, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, AreaChart } from "recharts"
-import { Users, Briefcase, AlertCircle, CreditCard, Globe, ArrowDownRight } from "lucide-react"
+export type TDahsboardStats = {
+  total_clients: number;
+  expiring_domains: number;
+  active_projects: number;
+  open_tickets: number;
+  pending_invoices: number;
+  total_pending_amount: number;
+};
 
 export function DashboardStats() {
-  // Sample data - replace with real data from your API
+  const { data: stats, isFetching: loading_stats } = useQuery<TDahsboardStats>({
+    queryKey: [RQKeys.DASHBOARD.RQ_STATES_ADMIN],
+    async queryFn() {
+      return (await http.get("/dashboard/stats")).data;
+    },
+  });
+
   const kpiData = {
     totalClients: { count: 247, newThisWeek: 8, newThisMonth: 23 },
     activeProjects: { count: 18, change: -2 },
     openTickets: { count: 8, urgent: 2 },
     pendingInvoices: { count: 12, totalAmount: 15750 },
     expiringDomains: { count: 5, next30Days: true },
-  }
+  };
 
-  // Chart data
-  const clientGrowthData = [
-    { month: "Jan", clients: 180 },
-    { month: "Feb", clients: 195 },
-    { month: "Mar", clients: 210 },
-    { month: "Apr", clients: 225 },
-    { month: "May", clients: 235 },
-    { month: "Jun", clients: 247 },
-  ]
-
-  const revenueData = [
-    { month: "Jan", revenue: 32000 },
-    { month: "Feb", revenue: 38000 },
-    { month: "Mar", revenue: 35000 },
-    { month: "Apr", revenue: 42000 },
-    { month: "May", revenue: 39000 },
-    { month: "Jun", revenue: 45230 },
-  ]
+  console.log(stats);
 
   return (
     <div className="space-y-6">
@@ -44,26 +51,33 @@ export function DashboardStats() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpiData.totalClients.count}</div>
-            <p className="text-xs text-muted-foreground">
-              +{kpiData.totalClients.newThisWeek} this week, +{kpiData.totalClients.newThisMonth} this month
-            </p>
+            <div className="text-2xl font-bold">
+              {loading_stats ? <Loader /> : stats?.total_clients}
+            </div>
+            {/* <p className="text-xs text-muted-foreground">
+              +{kpiData.totalClients.newThisWeek} this week, +
+              {kpiData.totalClients.newThisMonth} this month
+            </p> */}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Projects
+            </CardTitle>
             <Briefcase className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpiData.activeProjects.count}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-2xl font-bold">
+              {loading_stats ? <Loader /> : stats?.active_projects}
+            </div>
+            {/* <p className="text-xs text-muted-foreground">
               <span className="text-red-600 flex items-center">
                 <ArrowDownRight className="h-3 w-3 mr-1" />
                 {Math.abs(kpiData.activeProjects.change)} from last week
               </span>
-            </p>
+            </p> */}
           </CardContent>
         </Card>
 
@@ -73,31 +87,43 @@ export function DashboardStats() {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpiData.openTickets.count}</div>
-            <p className="text-xs text-muted-foreground">{kpiData.openTickets.urgent} urgent tickets</p>
+            <div className="text-2xl font-bold">
+              {loading_stats ? <Loader /> : stats?.open_tickets}
+            </div>
+            {/* <p className="text-xs text-muted-foreground">
+              {kpiData.openTickets.urgent} urgent tickets
+            </p> */}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Invoices</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Invoices
+            </CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{kpiData.pendingInvoices.count}</div>
+            <div className="text-2xl font-bold">
+              {loading_stats ? <Loader /> : stats?.pending_invoices}
+            </div>
             <p className="text-xs text-muted-foreground">
-              ${kpiData.pendingInvoices.totalAmount.toLocaleString()} total amount
+              ${stats?.total_pending_amount} total amount
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Expiring Domains</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Expiring Domains
+            </CardTitle>
             <Globe className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{kpiData.expiringDomains.count}</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {loading_stats ? <Loader /> : stats?.expiring_domains}
+            </div>
             <p className="text-xs text-muted-foreground">In next 30 days</p>
           </CardContent>
         </Card>
@@ -110,7 +136,7 @@ export function DashboardStats() {
             <CardTitle>Client Growth</CardTitle>
             <CardDescription>Monthly new client acquisitions</CardDescription>
           </CardHeader> */}
-          {/* <CardContent>
+        {/* <CardContent>
             <ChartContainer
               config={{
                 clients: {
@@ -165,8 +191,8 @@ export function DashboardStats() {
               </ResponsiveContainer>
             </ChartContainer>
           </CardContent> 
-        {/* </Card> */} 
+        {/* </Card> */}
       </div>
     </div>
-  )
+  );
 }
