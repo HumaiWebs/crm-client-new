@@ -9,13 +9,13 @@ import {
 type Props = {
   trigger?: React.ReactNode;
   children: React.ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<SetStateAction<boolean>>;
+  open?: boolean | undefined;
+  setOpen?: React.Dispatch<SetStateAction<boolean | undefined>>;
   title: string;
 };
-export default function Modal({ trigger, children, title }: Props) {
+export default function Modal({ trigger, children, title, open }: Props) {
   return (
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>{trigger || "Open Modal"}</DialogTrigger>
       <DialogContent>
         <DialogTitle>{title}</DialogTitle>
