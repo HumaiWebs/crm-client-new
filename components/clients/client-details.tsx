@@ -26,6 +26,8 @@ export default function ClientDetails({ clientId }: { clientId: string }) {
     <div className="border-t border-t-primary/20 pt-4">
       {isFetching ? (
         <Loader message="Loading client details" />
+      ) : projects?.length === 0 ? (
+        <p>No project found for this client</p>
       ) : (
         projects && (
           <div>
