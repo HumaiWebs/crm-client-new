@@ -11,6 +11,8 @@ export type TUser = {
   name: string;
   email: string;
   role: TUserRole;
+  phone: string;
+  password:?string
 };
 
 export type TUserRole = "admin" | "client";
@@ -24,7 +26,7 @@ export type TProject = {
     name: string;
     phone: string;
     createdAt: string;
-    email:string
+    email: string;
   };
   employees: any[];
   name: string;
@@ -43,16 +45,15 @@ export type TProject = {
   __v: number;
 };
 
-
 export interface KPIData {
-  totalClients: { count: number; newThisWeek: number; newThisMonth: number }
-  activeProjects: { count: number; change: number }
-  openTickets: { count: number; urgent: number }
-  pendingInvoices: { count: number; totalAmount: number }
-  expiringDomains: { count: number; next30Days: boolean }
+  totalClients: { count: number; newThisWeek: number; newThisMonth: number };
+  activeProjects: { count: number; change: number };
+  openTickets: { count: number; urgent: number };
+  pendingInvoices: { count: number; totalAmount: number };
+  expiringDomains: { count: number; next30Days: boolean };
 }
 
 export interface ChartData {
-  month: string
-  [key: string]: number | string
+  month: string;
+  [key: string]: number | string;
 }
