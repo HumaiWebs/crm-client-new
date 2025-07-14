@@ -1,7 +1,9 @@
 "use client";
 
 import { http } from "@/app/config/axiosClient";
+import AddClient from "@/components/clients/add-client";
 import ClientDetailsModal from "@/components/clients/client-details-modal";
+import DeleteClient from "@/components/clients/delete-client";
 import Loader from "@/components/global/loader";
 import Pagination from "@/components/global/pagination";
 import { Input } from "@/components/ui/input";
@@ -18,7 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DownloadIcon } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent } from "react";
-
+import { RQKeys } from "../../../app_data_store/react-query-keys";
 import { CSVLink } from "react-csv";
 
 export default function ClientsPage() {
@@ -29,7 +31,7 @@ export default function ClientsPage() {
   const pageSize = searchParams.get("pageSize") || 10;
 
   const { isFetching, data } = useQuery<{ data: TUser[]; total: number }>({
-    queryKey: ["get-clients_admin", page],
+    queryKey: [RQKeys.CLIENTS["RQ_GET-ALL-CLIENTS_ADMIN"], page],
     async queryFn() {
       return (await http.get(`/user?page=${page}&pageSize=${pageSize}`)).data;
     },
@@ -67,7 +69,12 @@ export default function ClientsPage() {
   return (
     <section className="p-4">
       <div className="w-ful flex flex-col gap-4">
-        <h3 className="font-semibold text-xl text-primary">All Clients</h3>
+        <div className="w-full flex justify-between">
+          <h3 className="font-semibold text-xl text-primary">All Clients</h3>
+          <div>
+            <AddClient />
+          </div>
+        </div>
         <div className="w-full gap-4 flex items-center">
           <Input
             onChange={handleSearchInputChange}
@@ -75,7 +82,9 @@ export default function ClientsPage() {
             placeholder="Search clients...."
           />
           <CSVLink
-            data={query.length === 0 ? data?.data ?? [] : searchResults ?? []}
+            data={
+              query.length === 0 ? (data?.data ?? []) : (searchResults ?? [])
+            }
             headers={csvHeaders}
             filename={`${new Date().toLocaleDateString()}-clients.csv`}
           >
@@ -89,22 +98,22 @@ export default function ClientsPage() {
           <Loader size="md" message="Loading clients....." />
         </div>
       ) : (
-        <Table className="my-8">
+        <Table className="my-8 border-separate border-spacing-y-0.5">
           <TableHeader>
             <TableRow>
-              <TableHead className="font-semibold text-primary p-4">
+              <TableHead className="font-semibold text-primary p-2 bg-primary/5 rounded-tl-sm rounded-bl-sm">
                 Image
               </TableHead>
-              <TableHead className="font-semibold text-primary p-4">
+              <TableHead className="font-semibold text-primary bg-primary/5 p-2">
                 Name
               </TableHead>
-              <TableHead className="font-semibold text-primary p-4">
+              <TableHead className="font-semibold text-primary bg-primary/5 p-2">
                 Email
               </TableHead>
-              <TableHead className="font-semibold text-primary p-4">
+              <TableHead className="font-semibold text-primary bg-primary/5 p-2">
                 Phone
               </TableHead>
-              <TableHead className="font-semibold text-primary p-4">
+              <TableHead className="font-semibold text-primary bg-primary/5 p-2 rounded-tr-sm rounded-br-sm">
                 Actions
               </TableHead>
             </TableRow>
@@ -113,27 +122,30 @@ export default function ClientsPage() {
             {(query.length === 0 ? data?.data : searchResults)?.map(
               (client) => {
                 return (
-                  <TableRow key={client._id} className="bg-white">
-                    <TableCell className="p-4 border-b border-b-blue-100">
+                  <TableRow key={client._id} className="border-b-none">
+                    <TableCell className="p-2 bg-white rounded-tl-lg rounded-bl-lg my-2">
                       <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
                     </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
+                    <TableCell className="p-2 bg-white">
                       {client.name}
                     </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
+                    <TableCell className="p-2 bg-white">
                       {client.email}
                     </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
-                      N/A
-                    </TableCell>
-                    <TableCell className="p-4 border-b border-b-blue-100">
+                    <TableCell className="p-2 bg-white">N/A</TableCell>
+                    <TableCell className="p-2 bg-white rounded-tr-lg rounded-br-lg">
                       <div className="flex gap-2 items-center">
                         <ClientDetailsModal clientId={client._id} />
+                        <AddClient edit client_id={client._id} />
+                        <DeleteClient
+                          client_id={client._id}
+                          client_name={client.name}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
                 );
-              }
+              },
             )}
           </TableBody>
         </Table>
@@ -141,7 +153,7 @@ export default function ClientsPage() {
       {isFetching ? (
         <Loader />
       ) : (
-        data && <Pagination totalPages={data.total / 1} />
+        data && <Pagination totalPages={data.total / 10} />
       )}
     </section>
   );
