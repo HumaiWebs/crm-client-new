@@ -82,9 +82,7 @@ export default function ClientsPage() {
             placeholder="Search clients...."
           />
           <CSVLink
-            data={
-              query.length === 0 ? (data?.data ?? []) : (searchResults ?? [])
-            }
+            data={query.length === 0 ? data?.data ?? [] : searchResults ?? []}
             headers={csvHeaders}
             filename={`${new Date().toLocaleDateString()}-clients.csv`}
           >
@@ -98,10 +96,10 @@ export default function ClientsPage() {
           <Loader size="md" message="Loading clients....." />
         </div>
       ) : (
-        <Table className="my-8 border-separate border-spacing-y-0.5">
+        <Table className="my-8 data_table">
           <TableHeader>
             <TableRow>
-              <TableHead className="font-semibold text-primary p-2 bg-primary/5 rounded-tl-sm rounded-bl-sm">
+              <TableHead className="font-semibold text-primary bg-primary/5">
                 Image
               </TableHead>
               <TableHead className="font-semibold text-primary bg-primary/5 p-2">
@@ -113,7 +111,7 @@ export default function ClientsPage() {
               <TableHead className="font-semibold text-primary bg-primary/5 p-2">
                 Phone
               </TableHead>
-              <TableHead className="font-semibold text-primary bg-primary/5 p-2 rounded-tr-sm rounded-br-sm">
+              <TableHead className="font-semibold text-primary bg-primary/5 p-2">
                 Actions
               </TableHead>
             </TableRow>
@@ -123,7 +121,7 @@ export default function ClientsPage() {
               (client) => {
                 return (
                   <TableRow key={client._id} className="border-b-none">
-                    <TableCell className="p-2 bg-white rounded-tl-lg rounded-bl-lg my-2">
+                    <TableCell className="p-2 bg-white">
                       <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
                     </TableCell>
                     <TableCell className="p-2 bg-white">
@@ -133,7 +131,7 @@ export default function ClientsPage() {
                       {client.email}
                     </TableCell>
                     <TableCell className="p-2 bg-white">N/A</TableCell>
-                    <TableCell className="p-2 bg-white rounded-tr-lg rounded-br-lg">
+                    <TableCell className="p-2 bg-white">
                       <div className="flex gap-2 items-center">
                         <ClientDetailsModal clientId={client._id} />
                         <AddClient edit client_id={client._id} />
@@ -145,7 +143,7 @@ export default function ClientsPage() {
                     </TableCell>
                   </TableRow>
                 );
-              },
+              }
             )}
           </TableBody>
         </Table>

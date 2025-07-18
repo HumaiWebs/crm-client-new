@@ -123,3 +123,27 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* datatable styles */
+
+.data_table {
+  @apply border-separate border-spacing-y-0.5;
+}
+
+.data_table th:nth-child(1) {
+  @apply rounded-tl-sm rounded-bl-sm;
+}
+
+.data_table th:last-child {
+  @apply rounded-tr-sm rounded-br-sm;
+}
+
+.data_table td:first-child {
+  @apply rounded-tl-lg rounded-bl-lg p-2;
+}
+
+.data_table td:last-child {
+  @apply rounded-tr-lg rounded-br-lg p-2;
+}
+
+/* --- datatable styles */
