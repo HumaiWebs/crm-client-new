@@ -1,7 +1,7 @@
 "use client";
 
 import { http } from "@/app/config/axiosClient";
-import AddClient from "@/components/clients/add-client";
+import ClientCrud from "@/components/clients/client-crud";
 import ClientDetailsModal from "@/components/clients/client-details-modal";
 import DeleteClient from "@/components/clients/delete-client";
 import Loader from "@/components/global/loader";
@@ -72,7 +72,7 @@ export default function ClientsPage() {
         <div className="w-full flex justify-between">
           <h3 className="font-semibold text-xl text-primary">All Clients</h3>
           <div>
-            <AddClient create />
+            <ClientCrud create />
           </div>
         </div>
         <div className="w-full gap-4 flex items-center">
@@ -134,7 +134,7 @@ export default function ClientsPage() {
                     <TableCell className="p-2 bg-white">
                       <div className="flex gap-2 items-center">
                         <ClientDetailsModal clientId={client._id} />
-                        <AddClient edit client_id={client._id} />
+                        <ClientCrud edit client_id={client._id} />
                         <DeleteClient
                           client_id={client._id}
                           client_name={client.name}

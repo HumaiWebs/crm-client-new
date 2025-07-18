@@ -28,7 +28,7 @@ type Props = {
   create?: boolean;
 };
 
-export default function AddClient({ create, edit, client_id }: Props) {
+export default function ClientCrud({ create, edit, client_id }: Props) {
   const searchParams = useSearchParams();
   const createTrigger = searchParams.get("createTrigger") === "true";
   const [modalOpen, setModalOpen] = useState<boolean | undefined>(undefined);
