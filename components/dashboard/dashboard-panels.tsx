@@ -1,7 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+'use client'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Users,
   FileText,
@@ -18,16 +25,19 @@ import {
   Activity,
   Calendar,
   Star,
-} from "lucide-react"
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function DashboardPanels() {
+  const router = useRouter();
+
   // Calendar/Timeline data
   const upcomingEvents = [
     { title: "Website Redesign Deadline", date: "Dec 15", type: "project" },
     { title: "Client Meeting - TechCorp", date: "Dec 12", type: "meeting" },
     { title: "Domain Renewal - startup.io", date: "Dec 20", type: "billing" },
     { title: "Project Milestone Review", date: "Dec 18", type: "milestone" },
-  ]
+  ];
 
   // Support data
   const supportData = {
@@ -35,11 +45,23 @@ export function DashboardPanels() {
     avgResolutionTime: "4.2 hours",
     satisfactionScore: 4.6,
     recentMessages: [
-      { client: "TechCorp", message: "Login issues with admin panel", time: "10 min ago" },
-      { client: "StartupXYZ", message: "Request for feature enhancement", time: "1 hour ago" },
-      { client: "RetailCo", message: "Payment gateway not working", time: "2 hours ago" },
+      {
+        client: "TechCorp",
+        message: "Login issues with admin panel",
+        time: "10 min ago",
+      },
+      {
+        client: "StartupXYZ",
+        message: "Request for feature enhancement",
+        time: "1 hour ago",
+      },
+      {
+        client: "RetailCo",
+        message: "Payment gateway not working",
+        time: "2 hours ago",
+      },
     ],
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -50,23 +72,41 @@ export function DashboardPanels() {
           <CardDescription>Jump into common tasks</CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <Button variant="outline" className="h-20 flex-col space-y-2 bg-transparent">
+          <Button
+            onClick={() => {
+              router.push("/clients?createTrigger=true");
+            }}
+            variant="outline"
+            className="h-20 flex-col space-y-2 bg-transparent cursor-pointer"
+          >
             <Users className="h-6 w-6" />
             <span>Add New Client</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col space-y-2 bg-transparent">
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2 bg-transparent"
+          >
             <FileText className="h-6 w-6" />
             <span>Create Invoice</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col space-y-2 bg-transparent">
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2 bg-transparent"
+          >
             <Briefcase className="h-6 w-6" />
             <span>Start Project</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col space-y-2 bg-transparent">
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2 bg-transparent"
+          >
             <MessageSquare className="h-6 w-6" />
             <span>Open Support Ticket</span>
           </Button>
-          <Button variant="outline" className="h-20 flex-col space-y-2 bg-transparent">
+          <Button
+            variant="outline"
+            className="h-20 flex-col space-y-2 bg-transparent"
+          >
             <Globe className="h-6 w-6" />
             <span>Add Domain/Hosting</span>
           </Button>
@@ -127,7 +167,9 @@ export function DashboardPanels() {
               </div>
               <div className="text-right">
                 <div className="font-semibold">45 Paid / 12 Unpaid</div>
-                <div className="text-xs text-muted-foreground">$15,750 pending</div>
+                <div className="text-xs text-muted-foreground">
+                  $15,750 pending
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-between">
@@ -136,7 +178,9 @@ export function DashboardPanels() {
                 <span className="text-sm">Projects</span>
               </div>
               <div className="text-right">
-                <div className="font-semibold">8 Todo / 18 Progress / 45 Done</div>
+                <div className="font-semibold">
+                  8 Todo / 18 Progress / 45 Done
+                </div>
                 <div className="text-xs text-muted-foreground">71 total</div>
               </div>
             </div>
@@ -186,7 +230,9 @@ export function DashboardPanels() {
               </div>
               <div className="text-right">
                 <div className="font-semibold text-green-600">Excellent</div>
-                <div className="text-xs text-muted-foreground">99.9% uptime</div>
+                <div className="text-xs text-muted-foreground">
+                  99.9% uptime
+                </div>
               </div>
             </div>
           </CardContent>
@@ -201,20 +247,25 @@ export function DashboardPanels() {
               <Calendar className="mr-2 h-5 w-5" />
               Upcoming Events
             </CardTitle>
-            <CardDescription>Project deadlines, meetings, and billing dates</CardDescription>
+            <CardDescription>
+              Project deadlines, meetings, and billing dates
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {upcomingEvents.map((event, index) => (
-              <div key={index} className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50">
+              <div
+                key={index}
+                className="flex items-center space-x-4 p-3 rounded-lg bg-muted/50"
+              >
                 <div
                   className={`h-3 w-3 rounded-full ${
                     event.type === "project"
                       ? "bg-blue-500"
                       : event.type === "meeting"
-                        ? "bg-green-500"
-                        : event.type === "billing"
-                          ? "bg-orange-500"
-                          : "bg-purple-500"
+                      ? "bg-green-500"
+                      : event.type === "billing"
+                      ? "bg-orange-500"
+                      : "bg-purple-500"
                   }`}
                 />
                 <div className="flex-1">
@@ -233,20 +284,32 @@ export function DashboardPanels() {
               <MessageSquare className="mr-2 h-5 w-5" />
               Support Overview
             </CardTitle>
-            <CardDescription>Ticket status and customer satisfaction</CardDescription>
+            <CardDescription>
+              Ticket status and customer satisfaction
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-blue-600">{supportData.openTickets}</div>
-                <div className="text-xs text-muted-foreground">Open Tickets</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {supportData.openTickets}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Open Tickets
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-600">{supportData.avgResolutionTime}</div>
-                <div className="text-xs text-muted-foreground">Avg Resolution</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {supportData.avgResolutionTime}
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Avg Resolution
+                </div>
               </div>
               <div className="flex items-center justify-center">
-                <div className="text-2xl font-bold text-yellow-600">{supportData.satisfactionScore}</div>
+                <div className="text-2xl font-bold text-yellow-600">
+                  {supportData.satisfactionScore}
+                </div>
                 <Star className="h-4 w-4 text-yellow-500 ml-1" />
                 <div className="text-xs text-muted-foreground ml-2">Rating</div>
               </div>
@@ -256,8 +319,11 @@ export function DashboardPanels() {
               <h4 className="text-sm font-medium">Latest Messages</h4>
               {supportData.recentMessages.map((msg, index) => (
                 <div key={index} className="text-xs">
-                  <span className="font-medium">{msg.client}:</span> {msg.message}
-                  <span className="text-muted-foreground ml-2">({msg.time})</span>
+                  <span className="font-medium">{msg.client}:</span>{" "}
+                  {msg.message}
+                  <span className="text-muted-foreground ml-2">
+                    ({msg.time})
+                  </span>
                 </div>
               ))}
             </div>
@@ -265,5 +331,5 @@ export function DashboardPanels() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

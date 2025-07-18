@@ -72,7 +72,7 @@ export default function ClientsPage() {
         <div className="w-full flex justify-between">
           <h3 className="font-semibold text-xl text-primary">All Clients</h3>
           <div>
-            <AddClient />
+            <AddClient create />
           </div>
         </div>
         <div className="w-full gap-4 flex items-center">

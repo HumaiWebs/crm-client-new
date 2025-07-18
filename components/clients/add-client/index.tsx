@@ -20,14 +20,27 @@ import { RQKeys } from "@/app_data_store/react-query-keys";
 import { TUser } from "@/type";
 import Loader from "@/components/global/loader";
 import { queryClient } from "@/app/store/QueryClientProvider";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   edit?: boolean;
   client_id?: string;
+  create?: boolean;
 };
 
-export default function AddClient({ edit, client_id }: Props) {
+export default function AddClient({ create, edit, client_id }: Props) {
+  const searchParams = useSearchParams();
+  const createTrigger = searchParams.get("createTrigger") === "true";
   const [modalOpen, setModalOpen] = useState<boolean | undefined>(undefined);
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log(create, " ", createTrigger);
+    if (create && createTrigger) {
+      setModalOpen(true);
+      router.push("/clients");
+    }
+  }, [createTrigger, create]);
 
   const {
     register,

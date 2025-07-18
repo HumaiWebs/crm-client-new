@@ -13,9 +13,15 @@ type Props = {
   setOpen?: React.Dispatch<SetStateAction<boolean | undefined>>;
   title: string;
 };
-export default function Modal({ trigger, children, title, open }: Props) {
+export default function Modal({
+  trigger,
+  children,
+  title,
+  open,
+  setOpen,
+}: Props) {
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger || "Open Modal"}</DialogTrigger>
       <DialogContent>
         <DialogTitle>{title}</DialogTitle>
