@@ -12,4 +12,7 @@ export const RQKeys = {
   DASHBOARD: {
     RQ_STATS_ADMIN: "RQ_STATS_ADMIN",
   },
+  EMPLOYEES: {
+    "RQ_GET-EMPLOYEES_ADMIN": "RQ_GET-EMPLOYEES_ADMIN",
+  },
 };
