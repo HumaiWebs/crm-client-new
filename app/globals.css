@@ -147,3 +147,9 @@
 }
 
 /* --- datatable styles */
+
+/* global styles */
+
+button {
+  cursor: pointer;
+}
