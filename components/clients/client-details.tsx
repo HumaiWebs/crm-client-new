@@ -1,5 +1,5 @@
 import { http } from "@/app/config/axiosClient";
-import { TProject } from "@/type";
+import { TProject, TUser } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Loader from "../global/loader";
@@ -11,43 +11,57 @@ import { Badge } from "../ui/badge";
 import Button from "../global/button";
 import { useRouter } from "next/navigation";
 import { RQKeys } from "@/app_data_store/react-query-keys";
+import Image from "next/image";
+import AvatarFromName from "../global/AvatarFromName";
+
+
 
 export default function ClientDetails({ clientId }: { clientId: string }) {
   const router = useRouter();
 
-  const { data: projects, isFetching } = useQuery<TProject[]>({
+  const { data, isFetching } = useQuery<{ projects: TProject[], client: TUser }>({
     queryKey: [RQKeys.CLIENTS["RQ_PROJECTS-BY-CLIENT_ADMIN"], clientId],
     async queryFn() {
       return (await http.get(`project/${clientId}`)).data;
     },
   });
 
+
   return (
     <div className="border-t border-t-primary/20 pt-4">
       {isFetching ? (
         <Loader message="Loading client details" />
-      ) : projects?.length === 0 ? (
-        <p>No project found for this client</p>
       ) : (
-        projects && (
+        (
           <div>
             <div className="flex gap-4 items-center">
-              <div className="w-[100px] h-[100px] relative border border-secondary rounded-full bg-slate-50"></div>
+              <div className="w-[100px] h-[100px] relative border border-secondary rounded-full bg-slate-50">
+                {data?.client.image ? (
+                  <Image
+                    src={data.client.image}
+                    alt="Client Avatar"
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                ) : (
+                  AvatarFromName(data?.client.name || "Unknown Client")
+                )}
+              </div>
               <div className="flex flex-col">
                 <h2 className="font-semibold text-lg text-secondary">
-                  {projects[0].client.name}
+                  {data?.client.name}
                 </h2>
                 <Link
                   className="text-gray-600 text-sm mt-2"
-                  href={"mailto:" + projects[0].client.email}
+                  href={"mailto:" + data?.client.email}
                 >
-                  {projects[0].client.email}
+                  {data?.client.email}
                 </Link>
                 <Link
                   className="text-gray-600 text-sm"
-                  href={"tel:" + projects[0].client.phone}
+                  href={"tel:" + data?.client.phone}
                 >
-                  {projects[0].client.phone}
+                  {data?.client.phone}
                 </Link>
               </div>
             </div>
@@ -55,7 +69,11 @@ export default function ClientDetails({ clientId }: { clientId: string }) {
               <h3 className="font-semibold text-lg mb-2 text-primary">
                 Projects
               </h3>
-              {projects.map((project) => {
+              {data?.projects.length === 0 ? <div className="flex flex-col items-center justify-center h-full">
+                <h2 className="text-lg text-secondary font-semibold">
+                  No projects found for this client.
+                </h2>
+              </div> : data?.projects.map((project) => {
                 return (
                   <Card className="border-l-4 mb-2 border-l-blue-500">
                     <CardHeader className="py-0">

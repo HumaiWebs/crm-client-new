@@ -22,6 +22,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent } from "react";
 import { RQKeys } from "../../../app_data_store/react-query-keys";
 import { CSVLink } from "react-csv";
+import AvatarFromName from "@/components/global/AvatarFromName";
 
 export default function ClientsPage() {
   const searchParams = useSearchParams();
@@ -119,10 +120,21 @@ export default function ClientsPage() {
           <TableBody>
             {(query.length === 0 ? data?.data : searchResults)?.map(
               (client) => {
+                console.log(client.name)
                 return (
                   <TableRow key={client._id} className="border-b-none">
                     <TableCell className="p-2 bg-white">
-                      <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
+                      <div className="w-[50px] text-sm h-[50px] border border-secondary rounded-full bg-slate-100">
+                        {client.image ? (
+                          <img
+                            src={client.image}
+                            alt="Client Avatar"
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          AvatarFromName(client.name || "Unknown Client")
+                        )}
+                      </div>
                     </TableCell>
                     <TableCell className="p-2 bg-white">
                       {client.name}

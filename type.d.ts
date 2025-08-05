@@ -10,9 +10,10 @@ export type TUser = {
   _id: string;
   name: string;
   email: string;
+  image?: string
   role: TUserRole;
   phone: string;
-  password:?string
+  password: ?string
 };
 
 export type TUserRole = "admin" | "client";
