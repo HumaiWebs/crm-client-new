@@ -5,16 +5,12 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { EmployeeSchema, TEmployeeSchema } from "@/zod/employee";
-import { TAddClientSchema } from "@/zod/client/add-client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { watch } from "fs";
-import { register } from "module";
 import ErrorMessage from "../global/error-message";
 import { useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { http } from "@/app/config/axiosClient";
 import toast from "react-hot-toast";
-import { set } from "zod";
 import { BiEdit } from "react-icons/bi";
 
 export default function CreateEmployeeModal({
