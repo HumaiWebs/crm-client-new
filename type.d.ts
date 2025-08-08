@@ -10,10 +10,21 @@ export type TUser = {
   _id: string;
   name: string;
   email: string;
-  image?: string
+  image?: string;
   role: TUserRole;
   phone: string;
-  password: ?string
+  password: ?string;
+};
+
+export type TEmployee = {
+  _id: string;
+  employee: TUser;
+  designation: string;
+  joiningDate: string;
+  salary: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 };
 
 export type TUserRole = "admin" | "client";

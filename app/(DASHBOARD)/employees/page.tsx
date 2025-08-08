@@ -19,7 +19,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { ChangeEvent } from "react";
 import { RQKeys } from "../../../app_data_store/react-query-keys";
 import { CSVLink } from "react-csv";
-import { TEmployee } from "@/@types/employees";
+import { TEmployee } from "../../../type";
+import Button from "@/components/global/button";
+import CreateEmployeeModal from "@/components/employee/create-employee-modal";
+import AvatarFromName from "@/components/global/AvatarFromName";
 
 export default function EmployeesPage() {
   const searchParams = useSearchParams();
@@ -39,7 +42,7 @@ export default function EmployeesPage() {
   // INFO: employees search
 
   const query = searchParams.get("query") || "";
-  const { data: searchResults, isFetching: searching } = useQuery<TUser[]>({
+  const { data: searchResults, isFetching: searching } = useQuery<TEmployee[]>({
     queryKey: ["search-employees_admin", query],
     async queryFn() {
       const result = (await http.get(`/user/search?search=${query}`)).data
@@ -65,12 +68,16 @@ export default function EmployeesPage() {
     { label: "Phone", key: "phone" },
   ];
 
+  console.log("data: ", data);
+
   return (
     <section className="p-4">
       <div className="w-ful flex flex-col gap-4">
         <div className="w-full flex justify-between">
           <h3 className="font-semibold text-xl text-primary">All Employees</h3>
-          <div>{/* <EmployeeCrud create /> */}</div>
+          <div>
+            <CreateEmployeeModal />
+          </div>
         </div>
         <div className="w-full gap-4 flex items-center">
           <Input
@@ -106,7 +113,7 @@ export default function EmployeesPage() {
                 Email
               </TableHead>
               <TableHead className="font-semibold text-primary bg-primary/5 p-2">
-                Phone
+                Designation
               </TableHead>
               <TableHead className="font-semibold text-primary bg-primary/5 p-2">
                 Actions
@@ -118,20 +125,23 @@ export default function EmployeesPage() {
               return (
                 <TableRow key={employee._id} className="border-b-none">
                   <TableCell className="p-2 bg-white">
-                    <div className="w-[50px] h-[50px] rounded-full bg-slate-100"></div>
+                    <div className="w-[50px] h-[50px] rounded-full bg-slate-100">
+                      {AvatarFromName(employee.employee.name)}
+                    </div>
                   </TableCell>
                   <TableCell className="p-2 bg-white">
-                    {employee.name}
+                    {employee.employee.name}
                   </TableCell>
                   <TableCell className="p-2 bg-white">
-                    {employee.email}
+                    {employee.employee.email}
                   </TableCell>
-                  <TableCell className="p-2 bg-white">N/A</TableCell>
+                  <TableCell className="p-2 bg-white">
+                    {employee.designation}
+                  </TableCell>
                   <TableCell className="p-2 bg-white">
                     <div className="flex gap-2 items-center">
-                      {/* <EmployeeDetailsModal employeeId={employee._id} />
-                      <EmployeeCrud edit employee_id={employee._id} />
-                      <DeleteEmployee
+                      <CreateEmployeeModal employeeId={employee._id} />
+                      {/*<DeleteEmployee
                         employee_id={employee._id}
                         employee_name={employee.name}
                       /> */}
