@@ -8,7 +8,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Sidebar />
       <section className="flex-1 bg-[#F5F5F5] flex flex-col">
         <DashbaordSectionHeader />
-        <div className="flex-1 w-full h-max max-h-screen overflow-y-auto">{children}</div>
+        <div className="flex-1 w-full h-max max-h-screen overflow-y-auto">
+          {children}
+        </div>
       </section>
     </main>
   );

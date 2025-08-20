@@ -71,7 +71,7 @@ export function DashboardPanels() {
           <CardTitle>Quick Actions</CardTitle>
           <CardDescription>Jump into common tasks</CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <CardContent className="max-md:p-2 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-2 xl:gap-4">
           <Button
             onClick={() => {
               router.push("/clients?createTrigger=true");
